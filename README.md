@@ -32,7 +32,7 @@ from torch.utils.tensorboard import SummaryWriter
 
 We initialie RunManager before starting training. 
 ```python
-- m = RunManager()
+m = RunManager()
 
 for run in RunBuilder.get_runs(params):
     
