@@ -1,5 +1,5 @@
 # About
-This is an implementation of [Deeplizard's TensorBoard with PyTorch - Visualize Deep Learning Metrics](https://youtu.be/pSexXMdruFM) to showcase TensorBoard. With TensorBoard, we can track, analyze and visualize our training models. It is especially useful for searching a good set of hyperparameters.
+This is an implementation of [Deeplizard's TensorBoard with PyTorch - Visualize Deep Learning Metrics](https://youtu.be/pSexXMdruFM) to showcase TensorBoard. With TensorBoard, we can track, analyze and visualize our training models. It is especially useful for searching a good set of hyperparameters. The dataset used in this example is the [Fashion MNIST](https://github.com/zalandoresearch/fashion-mnist) dataset from Zalando Research.
 
 # Hyperparameter Search
 
@@ -15,7 +15,7 @@ params = OrderedDict(
 
 We have 3 different learning rates [0.01, 0.005, 0.001], two batch sizes [100, 1000] and different numbers of num_workers (denotes the number of processes that generate batches in parallel). Is the set `(lr=0.01, batch_size=100, num_workers=0)` good? Or is for example the set `(lr=0.005, batch_size=1000, num_workers=1)` better? Taking the cartesian product of these sets equals to 12 different combination of hyperparameters. We could conduct 12 separate training sessions and compare their performances afterwards. Or we could include all 12 possible sets of hyperparameters in a single training loop and compare them in TensorBoard afterwards. Let's do the later.
 
-# Setup Before Training
+# RunManager.py
 
 1. [Install TensorBoard](https://pytorch.org/docs/stable/tensorboard.html) so we can use TensorBoard's SummaryWriter function:
 ```python
@@ -23,15 +23,22 @@ from torch.utils.tensorboard import SummaryWriter
 ```
 2. `RunManager.py` helps us in multiple ways.
 
-**to be continued**
+    1. The two classes in that file (`RunManager` and `RunBuilder`) save all kinds of information for us, like accuracy and loss per epoch/run, information about our network, duration per epoch etc... all information that we can visualize later in TensorBoard. Another useful method `def save(self, fileName):` gives us another possibility to save our results in `.json` or `.csv` respectively.
+    
+    2. "Outsourcing" the saving of information to a different file helps to keep the training loop itself clear and easy to track.
 
 
+We initialize our parameters and the RunManager() before the training loop.
 
-- useful to outsource our training loop. 
-- Runmanager.py has two classes: RunBuilder and RunManager. Useful for saving all kinds of information for the SummaryWriter (save informaton about loss, accuracy, details of our parameter etc). Also possible to save results in json or csv format. Saves data in our Summary writer
-
-We initialie RunManager before starting training. 
 ```python
+
+params = OrderedDict(
+    lr = [0.01, 0.005, 0.001],
+    batch_size = [100, 1000],
+    num_workers = [0, 1]
+    #shuffle = [True, False]
+)
+
 m = RunManager()
 
 for run in RunBuilder.get_runs(params):
@@ -48,6 +55,31 @@ for run in RunBuilder.get_runs(params):
  ```
         
  # Training: Step-by-Step
+ 
+ 1. Adjust the hyperparameters you want to use in (`params = OrderedDict`) in `train.py`
+ 
+ 2. Run the file with 
+ ```python
+ python train.py
+ ```
+ 
+ 3. This will generate the following files:
+    * A .json file with all the results (`results.json`).
+    * A .csv file with all the results (`results.csv`).
+    * A `runs` folder where the results are saved in a format that TensorBoard can use.
+    
+  4. After installing tensorboard, navigate to the folder repository and type in a terminal:
+  ```
+  tensorboard --logdir=runs
+  ```
+  5. The command will give you an output like `http://localhost:6006/` (or similar) and copy that in your web browser.
+  
+  
+ # TensorBoard Visualization
+ 
+ 
+  
+  
  
 
 
