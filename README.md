@@ -13,7 +13,7 @@ params = OrderedDict(
 )
 ```
 
-We have 3 different learning rates [0.01, 0.005, 0.001], two batch sizes [100, 1000] and different numbers of num_workers (denotes the number of processes that generate batches in parallel). Is the set `(lr=0.01, batch_size=100, num_workers=0)` good? Or is for example the set `(lr=0.005, batch_size=1000, num_workers=1)` better? Taking the cartesian product of these sets equals to 12 different combination of hyperparameters. We could conduct 12 separate training sessions and compare their performances afterwards. Or we could include all 12 possible sets of hyperparameters in a single training loop and compare them in TensorBoard afterwards. Let's do the later.
+We have 3 different learning rates [0.01, 0.005, 0.001], two batch sizes [100, 1000] and different numbers of num_workers (denotes the number of processes that generate batches in parallel). Is the set `(lr=0.01, batch_size=100, num_workers=0)` good? Or is for example the set `(lr=0.005, batch_size=1000, num_workers=1)` better? Taking the cartesian product of those sets equals to 12 different combination of hyperparameters. We could conduct 12 separate training sessions and compare their performances afterwards. Or we could include all 12 possible sets of hyperparameters in a single training loop and compare them in TensorBoard afterwards. Let's do the later.
 
 # RunManager.py
 
@@ -28,7 +28,7 @@ from torch.utils.tensorboard import SummaryWriter
     2. "Outsourcing" the saving of information to a different file helps to keep the training loop itself clear and easy to track.
 
 
-We initialize our parameters and the RunManager() before the training loop.
+We initialize our hyperparameters and the RunManager() before the training loop.
 
 ```python
 
@@ -68,7 +68,7 @@ for run in RunBuilder.get_runs(params):
     * A .csv file with all the results (`results.csv`).
     * A `runs` folder where the results are saved in a format that TensorBoard can use.
     
-  4. After installing tensorboard, navigate to the folder repository and type in a terminal:
+  4. After installing tensorboard, specify the `runs` folder TensorBoard should use. Navigate to the folder repository and type in a terminal:
   ```
   tensorboard --logdir=runs
   ```
@@ -76,11 +76,11 @@ for run in RunBuilder.get_runs(params):
   
   
  # TensorBoard Visualization
- 1. Overview of our accuracy and losses of all (12) training instances / different hyperparameter settings. We can see track the accuracy, number of steps (epoch), time and duration of each instance. We can see that (the dark green) instance with the hyperparameter set `lr=0.005, batch_size=100, num_workers=1` has the highest accuracy, however it takes slightly longer than the other instances to finish with `41s`.
+ 1. Overview of our accuracy and losses of all (12) training instances / different hyperparameter settings. We can track the accuracy, number of steps (epoch), time and duration of each instance. We can see that (the dark green) instance with the hyperparameter set `lr=0.005, batch_size=100, num_workers=1` has the highest accuracy, however it takes slightly longer than the other instances to finish with `41s`.
  
  ![accuracy](./images/accuracy.jpg)
  
- Same goes for the losses:
+ Losses:
  
  ![loss](./images/loss.jpg)
  
@@ -98,7 +98,9 @@ for run in RunBuilder.get_runs(params):
  
  ![histogram](./images/histogram.jpg)
  
- All in all, a very useful tool to track our training process.
+ # Summary
+ 
+ We implemented [Deeplizard's TensorBoard with PyTorch - Visualize Deep Learning Metrics](https://youtu.be/pSexXMdruFM) to showcase TensorBoard (check out the video for further details). With TensorBoard, we can visualize and track our results like accuracy, loss, training inputs, the network architecture itself etc. It is especially useful for comparing multiple training sessions with different sets of hyperparameters.
  
  
 
