@@ -76,12 +76,31 @@ for run in RunBuilder.get_runs(params):
   
   
  # TensorBoard Visualization
+ 1. Overview of our accuracy and losses of all (12) training instances / different hyperparameter settings. We can see track the accuracy, number of steps (epoch), time and duration of each instance. We can see that (the dark green) instance with the hyperparameter set `lr=0.005, batch_size=100, num_workers=1` has the highest accuracy, however it takes slightly longer than the other instances to finish with `41s`.
+ 
+ ![accuracy](./images/accuracy.jpg)
+ 
+ Same goes for the losses:
+ 
+ ![loss](./images/loss.jpg)
+ 
+ 2. Take a look at our training examples.
+ 
+ ![input](./images/input.jpg)
+ 
+ 3. Take a look at our network / graph.
+ 
+ ![graph](./images/graph.jpg)
+ 
+ 4. Distribition and histograms of our network weights.
+ 
+ ![distribution](./images/distribution.jpg)
+ 
+ ![histogram](./images/histogram.jpg)
+ 
+ All in all, a very useful tool to track our training process.
  
  
-  
-  
- 
-
 
 
 
